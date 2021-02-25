@@ -46,7 +46,7 @@ int main(){
 				mas1[k][1] = mas1[k-1][1];
 			}
 			mas1[k][1]--;
-			for(int k=0; k<4; k++) // !!!
+			for(int k=0; k<4; k++)
 				mvaddch(mas1[k][0],mas1[k][1],mas2[k]);	
 		}
 		refresh();
