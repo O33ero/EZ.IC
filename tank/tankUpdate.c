@@ -109,8 +109,8 @@ int main()
             g = '/';
             break;
         case 'x':
-            gun.x = 1;
-            gun.y = 0;
+            gun.x = 0;
+            gun.y = 1;
             g = '|';
             break;
         case 'c':
