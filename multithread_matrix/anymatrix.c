@@ -151,6 +151,7 @@ void* thr_scan_matrix(void* param) // In: File, Matrix / Out: Matrix from file
 
     *A = scan_matrix(file);
 
+    print_matrix(*A);
     return NULL;
 }
 
@@ -174,46 +175,106 @@ int main(int argc, char* argv[])
     clock_t begin = clock();
 
 
-    FILE* file1 = fopen(/*argv[1]*/ "./tests/1.txt", "r");
-    FILE* file2 = fopen(/*argv[1]*/ "./tests/6.txt", "r");
-    matrix A, B, R;
+    FILE* file1 = fopen(/*argv[1]*/ "./tests/2.txt", "r");
+    FILE* file2 = fopen(/*argv[1]*/ "./tests/3.txt", "r");
+    FILE* file3 = fopen(/*argv[1]*/ "./tests/4.txt", "r");
+    FILE* file4 = fopen(/*argv[1]*/ "./tests/5.txt", "r");
+    FILE* file5 = fopen(/*argv[1]*/ "./tests/6.txt", "r");
+    matrix A, B, C, D, E, R1, R2, R3, R4, R5;
     init_matrix(&A);
     init_matrix(&B);
-    init_matrix(&R);
+    init_matrix(&C);
+    init_matrix(&D);
+    init_matrix(&E);
+    init_matrix(&R1);
+    init_matrix(&R2);
+    init_matrix(&R3);
+    init_matrix(&R4);
+    init_matrix(&R5);
     
-    pthread_t tr_0;
-    pthread_t tr_1;
+    // pthread_t tr_0;
+    // pthread_t tr_1;
+    // pthread_t tr_2;
+    // pthread_t tr_3;
+    // pthread_t tr_4;
 
-    thr_args arg[2];
+    // thr_args arg[5];
     
-    arg[0].file = file1;
-    arg[0].mat_A = &A; 
+    // arg[0].file = file1;
+    // arg[0].mat_A = &A; 
     
-    arg[1].file = file2;
-    arg[1].mat_A = &B;
+    // arg[1].file = file2;
+    // arg[1].mat_A = &B;
 
+    // arg[2].file = file3;
+    // arg[2].mat_A = &C;
 
-    pthread_create(&tr_0, NULL, thr_scan_matrix, (void*) &arg[0]);
-    pthread_create(&tr_1, NULL, thr_scan_matrix, (void*) &arg[1]);
+    // arg[3].file = file4;
+    // arg[3].mat_A = &D;
+
+    // arg[4].file = file5;
+    // arg[4].mat_A = &E;
+
+    // pthread_create(&tr_0, NULL, thr_scan_matrix, (void*) &arg[0]);
+    // pthread_create(&tr_1, NULL, thr_scan_matrix, (void*) &arg[1]);
+    // pthread_create(&tr_2, NULL, thr_scan_matrix, (void*) &arg[2]);
+    // pthread_create(&tr_3, NULL, thr_scan_matrix, (void*) &arg[3]);
+    // pthread_create(&tr_4, NULL, thr_scan_matrix, (void*) &arg[4]);
     
 
-    pthread_join(tr_0, NULL);
-    pthread_join(tr_1, NULL);
+    // arg[0].mat_A = &A;
+    // arg[0].mat_B = &A;
+    // arg[0].mat_R = &R1;
 
-    arg[0].mat_A = &A;
-    arg[0].mat_B = &B;
-    arg[0].mat_R = &R;
-    pthread_create(&tr_0, NULL, thr_multiply_matrix, (void*) &arg[0]);
+    // arg[1].mat_A = &B;
+    // arg[1].mat_B = &B;
+    // arg[1].mat_R = &R2;
 
+    // arg[2].mat_A = &C;
+    // arg[2].mat_B = &C;
+    // arg[2].mat_R = &R3;
+
+    // arg[3].mat_A = &D;
+    // arg[3].mat_B = &D;
+    // arg[3].mat_R = &R4;
+
+    // arg[4].mat_A = &E;
+    // arg[4].mat_B = &E;
+    // arg[4].mat_R = &R5;
+
+    // pthread_create(&tr_0, NULL, thr_multiply_matrix, (void*) &arg[0]);
+    // pthread_create(&tr_1, NULL, thr_multiply_matrix, (void*) &arg[1]);
+    // pthread_create(&tr_2, NULL, thr_multiply_matrix, (void*) &arg[2]);
+    // pthread_create(&tr_3, NULL, thr_multiply_matrix, (void*) &arg[3]);
+    // pthread_create(&tr_4, NULL, thr_multiply_matrix, (void*) &arg[4]);
+    
+
+    // pthread_join(tr_4, NULL);
+
+    A = scan_matrix(file1);
     print_matrix(A);
+
+    B = scan_matrix(file2);
     print_matrix(B);
 
-    pthread_join(tr_0,NULL);
-    print_matrix(R);
-    
-    free_array2d(A.m, A.size_a, A.size_b);
-    free_array2d(B.m, A.size_a, A.size_b);
-    free_array2d(R.m, R.size_a, R.size_b);
+    C = scan_matrix(file3);
+    print_matrix(C);
+
+    D = scan_matrix(file4);
+    print_matrix(D);
+
+    E = scan_matrix(file5);
+    print_matrix(E);
+
+    R1 = multiply_matrix(&A, &A);
+    R2 = multiply_matrix(&B, &B);
+    R3 = multiply_matrix(&C, &C);
+    R4 = multiply_matrix(&D, &D);
+    R5 = multiply_matrix(&E, &E);
+
+
+
+
 
     clock_t end = clock();
     double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
