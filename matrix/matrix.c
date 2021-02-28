@@ -3,15 +3,17 @@
 #include <malloc.h>
 #include <stdint.h>
 
+// * Структура матрицы
 typedef struct 
 {
-    int64_t** m;
-    int64_t size_a;
-    int64_t size_b;
+    int64_t** m; // Указатель на массив указатейлей на массивы строк матрицы
+    int64_t size_a; // Число столбцов
+    int64_t size_b; // Число строк
 
 }matrix;
 
 
+// * Создает двумерный массив заданной длины
 int64_t ** create_array2d(int64_t columns, int64_t rows)
 {
     int64_t ** arr = malloc(sizeof(int64_t*) * rows );
@@ -24,6 +26,7 @@ int64_t ** create_array2d(int64_t columns, int64_t rows)
     return arr;
 }
 
+// * Освобождение двумерного массива
 void free_array2d(int64_t** arr, int64_t columns, int64_t rows)
 {
     if (arr == 0)
@@ -38,6 +41,7 @@ void free_array2d(int64_t** arr, int64_t columns, int64_t rows)
     arr = NULL;
 }
 
+// * Печатаю матрицу
 void print_matrix(matrix m)
 {
     if (m.m == 0)
@@ -55,6 +59,7 @@ void print_matrix(matrix m)
 	}
 }
 
+// * Сканирую матрицу из файла
 matrix scan_matrix(FILE* file)
 {
     matrix m;
@@ -94,6 +99,7 @@ matrix scan_matrix(FILE* file)
     return m;
 }
 
+// * Умножаю две матрицы
 matrix multiply_matrix(matrix* A, matrix* B) // C[i,j] = Sum(A[i,k]*B[k,j]);
 {
     matrix R;
