@@ -3,15 +3,16 @@
 #include <malloc.h>
 #include <stdint.h>
 
+// * Структура матрицы
 typedef struct 
 {
-    int64_t** m;
-    int64_t size_a;
-    int64_t size_b;
+    int64_t** m; // Указатель на массив указателей на массивы строк матрицы
+    int64_t size_a; // Число столбцов
+    int64_t size_b; // Число строк
 
 }matrix;
 
-
+// * Создаю двумерный массив заданного размера
 int64_t ** create_array2d(int64_t columns, int64_t rows)
 {
     int64_t ** arr = malloc(sizeof(int64_t*) * rows );
@@ -24,6 +25,7 @@ int64_t ** create_array2d(int64_t columns, int64_t rows)
     return arr;
 }
 
+// * Освобождаю двумерный массив
 void free_array2d(int64_t** arr, int64_t columns, int64_t rows)
 {
     if (arr == 0)
@@ -38,6 +40,7 @@ void free_array2d(int64_t** arr, int64_t columns, int64_t rows)
     arr = NULL;
 }
 
+// * Печатаю матрицу
 void print_matrix(matrix m)
 {
     if (m.m == 0)
@@ -57,6 +60,7 @@ void print_matrix(matrix m)
     printf("\n");
 }
 
+// * Сканирую матрицу из файла
 matrix scan_matrix(FILE* file)
 {
     matrix m;
@@ -66,7 +70,7 @@ matrix scan_matrix(FILE* file)
     int size_a = 0;
     int size_b = 0;
     
-    while ((check = fscanf(file, "%d%c", &t, &ch)) != -1)
+    while ((check = fscanf(file, "%d%c", &t, &ch)) != -1) // Вычисляю размер матрицы
     {
         if (ch == ' ' && size_b == 0) 
             size_a++;
@@ -77,8 +81,8 @@ matrix scan_matrix(FILE* file)
         }
     }
 
-    fseek(file, 0, SEEK_SET);
-    m.m = create_array2d(size_a, size_b);
+    fseek(file, 0, SEEK_SET); // Возвращаюсь в начало файла
+    m.m = create_array2d(size_a, size_b); // Создаю матрицу заданного размера
     m.size_a = size_a;
     m.size_b = size_b;
 
@@ -86,7 +90,7 @@ matrix scan_matrix(FILE* file)
     {
         for (int j = 0; j < size_a; j++) 
         {
-            if ((check = fscanf(file, "%d%c", &t, &ch)) == -1) break;
+            if ((check = fscanf(file, "%d%c", &t, &ch)) == -1) break; // Если не считало ничего, то ломай
             
             m.m[i][j] = t;
         }    
@@ -96,6 +100,7 @@ matrix scan_matrix(FILE* file)
     return m;
 }
 
+// * Умножаю матрицы
 matrix multiply_matrix(matrix* A, matrix* B) // C[i,j] = Sum(A[i,k]*B[k,j]);
 {
     matrix R;
@@ -110,7 +115,7 @@ matrix multiply_matrix(matrix* A, matrix* B) // C[i,j] = Sum(A[i,k]*B[k,j]);
 
     R.size_a = A->size_a;
     R.size_b = B->size_b;
-    R.m = create_array2d(R.size_a, R.size_b);
+    R.m = create_array2d(R.size_a, R.size_b); // Создаю новую результирующую матрицу
 
     for (int i = 0; i < R.size_b; i++)
     {
