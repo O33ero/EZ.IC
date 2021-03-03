@@ -3,7 +3,7 @@
 #include <math.h>
 #include <pthread.h>
 
-typedef struct {
+typedef struct { // А если не передавать строку_1, строку_2, а передать целиком структуру МАТРИЦА, в которой лежит все сразу
 	int lines_1;
 	int columns_1; 
 	int lines_2;
@@ -12,12 +12,14 @@ typedef struct {
 	int** mass2; 
 	int** mass_sum;
 } pthrData;
+
+
 int lines_of_matrix(FILE* ptrfile){
 	rewind(ptrfile);
 	int lines = 0, columns = 0;
 	char ch;
 	int s, n;
-	while ((n = fscanf(ptrfile, "%d%c", &s, &ch)) != -1)
+	while ((n = fscanf(ptrfile, "%d%c", &s, &ch)) != -1) // Хмм... Автор этой строки гений.
     {
 
         if (ch == '\n')
@@ -54,7 +56,10 @@ void* threadFunc(void* thread_data){
 			}
 			data->mass_sum[i][n] = sum;
 			sum = 0;
-			printf("mass_sum[%d][%d]=%d ", i, n, data->mass_sum[i][n]);
+			printf("mass_sum[%d][%d]=%d ", i, n, data->mass_sum[i][n]); // Вывод в поток ставить не надо. 
+																		// У тебя будет вывод на 10 потоков работать и они будут друг другу мешать.
+																		// Например, в поток вывода будет отправлена одна строка, потом другой поток
+																		// Её поменяет и в итоге изначальный вывод потеряется.
 		}
 		printf("\n");
 	}
@@ -62,8 +67,12 @@ void* threadFunc(void* thread_data){
 	return NULL;
 }
 
-
- 
+/*
+ * Плюс-минус ок, только аккуратнее с потоками и
+ * старатся как можно меньше строк в main и больше в функциях.
+ * 
+ * Ну и конечный результат (конечная матрица) должна в файлы записываться.
+*/
 int main()
 {
     int columns_1 = 0, lines_1 = 0, i, j;
@@ -75,7 +84,7 @@ int main()
 	ptrfile=fopen("mass.txt","r+"); 
 	lines_1 = lines_of_matrix(ptrfile);
 	columns_1 = columns_of_matrix(ptrfile);
-	columns_1 = columns_1 / lines_1;
+	columns_1 = columns_1 / lines_1; // Кста норм решение, мне нравится
 	printf("lines_1 = %d \n", lines_1);
 	printf("columns_1 = %d \n", columns_1);
 
@@ -87,9 +96,9 @@ int main()
 	printf("columns_2 = %d \n", columns_2);
 
 	if (columns_1 == columns_1){
-		int **mass = (int **)malloc(sizeof(int *) * lines_1);
+		int **mass = (int **)malloc(sizeof(int *) * lines_1); // А если не делать 3 раз одно и то же, а вынести все в функицю?
 		for(int i = 0; i < columns_1; i++) {
-		    mass[i] = (int *)malloc(sizeof(int *) * columns_1);
+		    mass[i] = (int *)malloc(sizeof(int *) * columns_1); //
 		}
 		int **mass1 = (int **)malloc(sizeof(int *) * lines_2);
 		for(int i = 0; i < columns_2; i++) {
