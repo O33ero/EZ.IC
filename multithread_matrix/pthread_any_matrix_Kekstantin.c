@@ -45,7 +45,7 @@ matrix check_file(FILE* fp){
 
     A.A = create_matrix(x, y);
     A.column = x;
-    A.row = y;    
+    A.row = y;     // !!! Не знаю почему, но матрицу /tests/2.txt он определяет как 3x4, что неверно
     
     int number;
     char ch;
@@ -109,7 +109,7 @@ void init_matrix(matrix* A){
     A->row = 0;
 }
 
-typedef struct{
+typedef struct{ // Автор этой структуры гений
     FILE* fp;
     matrix* A;
     matrix* B;
@@ -117,7 +117,7 @@ typedef struct{
 } flow_arguments;
 
 void* pthread_check_file(void* args){
-    flow_arguments *arg = (flow_arguments*) args;
+    flow_arguments *arg = (flow_arguments*) args; // Автор этого метода генией
     FILE* fp = arg->fp;
     matrix* A = arg->A;
     *A = check_file(fp);
@@ -126,7 +126,7 @@ void* pthread_check_file(void* args){
 }
 
 void* pthread_multiply_matrix(void* args){
-    flow_arguments *arg = (flow_arguments*) args;
+    flow_arguments *arg = (flow_arguments*) args; // Автор этого метода гений
     matrix* A = arg->A;
     matrix* B = arg->B;
     matrix* C = arg->C;
@@ -146,12 +146,12 @@ int main(int argc, char* argv[]){
     init_matrix(&B);
     init_matrix(&C);
     
-    if ((fp1 = fopen(argv[1], "r")) == NULL)
+    if ((fp1 = fopen(argv[1] /*"./tests/1.txt"*/, "r")) == NULL)
     {
         printf("Не удалось открыть файл");
         return 0;
     }
-    if ((fp2 = fopen(argv[2], "r")) == NULL)
+    if ((fp2 = fopen(argv[2] /*"./tests/2.txt"*/, "r")) == NULL)
     {
         printf("Не удалось открыть файл");
         return 0;
