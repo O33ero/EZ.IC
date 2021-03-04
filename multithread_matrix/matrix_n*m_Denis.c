@@ -44,9 +44,11 @@ int columns_of_matrix(FILE* ptrfile1){
 }
 
 void print_matrix(int** mass_sum, int lines, int columns){
+	FILE *file_out;
+	file_out = fopen("out.txt", "w+");
 	for(int i = 0; i<lines; i++){
 		for(int j = 0; j<columns; j++){
-			printf("mass_sum[%d][%d]=%d ", i, j, mass_sum[i][j]); 
+			printf(file_out, "%d ", mass_sum[i][j]); 
 		}
 		printf("\n");
 	}
@@ -55,25 +57,22 @@ void print_matrix(int** mass_sum, int lines, int columns){
 void* threadFunc(void* thread_data){
 	int a=0, sum = 0;
 	
-	pthrData *data = (pthrData*) thread_data; // значит тут мы должны составить одну строку для результурующей матрицы за один поток (2/3)
+	pthrData *data = (pthrData*) thread_data; 
 
-	for(int i = data->lines_1; i <= data->lines_1; i++){  // Берем одну конкретнкую строку матрицы A
+	for(int i = data->lines_1; i <= data->lines_1; i++){  
 		
 
-		for(int n = 0; n < data->columns_2; n++){ // Умножаем на каждый элемент столбца B
+		for(int n = 0; n < data->columns_2; n++){ 
 			for(int j = 0; j < data->columns_1; j++){
 				a = data->mass1[i][j] * data->mass2[j][n];
 				sum = sum + a;
 			}
-			data->mass_sum[i][n] = sum; // Записываем результат в соответсвующую ячеку матрицы AxB = R
-			// Всё, переходим к следующему элементу строки R, или выходим из потока, если столбцы B закончились
+			data->mass_sum[i][n] = sum; 
 			sum = 0;
 			a = 0;			
 		}
 
-		/*
-		 * Получается, что у нас 3 потока, каждый из которых считают одну строку для R.
-		*/ 	
+	
 	}
  	
 
@@ -82,7 +81,7 @@ void* threadFunc(void* thread_data){
 
 
  
-int main()
+int main(int argc, char* argv[])
 {
     int columns_1 = 0, lines_1 = 0, i, j;
     int columns_2 = 0, lines_2 = 0;
@@ -90,14 +89,14 @@ int main()
 	FILE *ptrfile1;
 	char ch;
 	int s;
-	ptrfile=fopen("./tests/5.txt","r+"); 
+	ptrfile=fopen(argv[1],"r+"); 
 	lines_1 = lines_of_matrix(ptrfile);
 	columns_1 = columns_of_matrix(ptrfile);
 	columns_1 = columns_1 / lines_1;
 	printf("lines_1 = %d \n", lines_1);
 	printf("columns_1 = %d \n", columns_1);
 
-	ptrfile1=fopen("./tests/5.txt","r+"); 
+	ptrfile1=fopen(argv[2],"r+"); 
 	lines_2 = lines_of_matrix(ptrfile1);
 	columns_2 = columns_of_matrix(ptrfile1);
 	columns_2 = columns_2 / lines_2;
@@ -144,7 +143,7 @@ int main()
 		pthread_t* threads = (pthread_t*) malloc(lines_1 * sizeof(pthread_t));
 		pthrData* threadData = (pthrData*) malloc(lines_1 * sizeof(pthrData));
 
-		for(int i = 0; i < lines_1; i++){ // т.е. создаем поток для каждой строки (1/3)
+		for(int i = 0; i < lines_1; i++){ 
 			threadData[i].lines_1 = i;
 			threadData[i].columns_1 = columns_1;
 			threadData[i].columns_2 = columns_2;
@@ -159,7 +158,7 @@ int main()
 		for(int i = 0; i < lines_1; i++)
 			pthread_join(threads[i], NULL);
 		
-		print_matrix(mass_sum, lines_1, columns_2); // Теперь выводим всю матрицу, которая лежит в mass_sum (3/3)
+		print_matrix(mass_sum, lines_1, columns_2); 
 
 		
 	}
