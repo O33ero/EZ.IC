@@ -43,7 +43,7 @@ int columns_of_matrix(FILE* ptrfile1){
 	return columns;
 }
 
-void print_matrix(int** mass_summ, int lines, int columns){
+void print_matrix(int** mass_sum, int lines, int columns){
 	for(int i = 0; i<lines; i++){
 		for(int j = 0; j<columns; j++){
 			printf("mass_sum[%d][%d]=%d ", i, j, mass_sum[i][j]);
