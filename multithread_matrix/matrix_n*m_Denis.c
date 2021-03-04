@@ -61,17 +61,18 @@ void* threadFunc(void* thread_data){
 	for(int i = 0; i < data->lines_1; i++){
 		for(int n = 0; n < data->columns_2; n++){
 			for(int j = 0; j < data->columns_1; j++){
-				a = data->mass1[i][j] * data->mass2[j][n];
+				a = data->mass1[i][j] * data->mass2[j][n]; 
 				sum = sum + a;
 			}
 			data->mass_sum[i][n] = sum;
 			sum = 0;
-			printf("mass_sum[%d][%d]=%d ", i, n, data->mass_sum[i][n]);
+			//printf("mass_sum[%d][%d]=%d ", i, n, data->mass_sum[i][n]); // Вот это убрать, а то бред какой то в консоли происходит
+
 		}
 		printf("\n");
 	}
  	
-	print_matrix(data->mass_sum, data->lines_1, data->columns_2);
+	print_matrix(data->mass_sum, data->lines_1, data->columns_2); // Шо то не то, ломается опять вывод. Последнюю строку не выводит.
 
 	return NULL;
 }
@@ -86,14 +87,14 @@ int main()
 	FILE *ptrfile1;
 	char ch;
 	int s;
-	ptrfile=fopen("mass.txt","r+"); 
+	ptrfile=fopen("./tests/1.txt","r+"); 
 	lines_1 = lines_of_matrix(ptrfile);
 	columns_1 = columns_of_matrix(ptrfile);
 	columns_1 = columns_1 / lines_1;
 	printf("lines_1 = %d \n", lines_1);
 	printf("columns_1 = %d \n", columns_1);
 
-	ptrfile1=fopen("mass1.txt","r+"); 
+	ptrfile1=fopen("./tests/1.txt","r+"); 
 	lines_2 = lines_of_matrix(ptrfile1);
 	columns_2 = columns_of_matrix(ptrfile1);
 	columns_2 = columns_2 / lines_2;
