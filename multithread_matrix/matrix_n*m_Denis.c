@@ -46,11 +46,16 @@ int columns_of_matrix(FILE* ptrfile1){
 void print_matrix(int** mass_sum ){
 	for(int i = 0; 1; i++){
 		for(int j = 0; 1; j++){
-			if(mass_sum[i][j]){
-				printf("mass_sum[%d][%d]=%d ", i, j, mass_sum[i][j]);
+			if(mass_sum[i][j]){ /* 
+								 * 1) В этой строке меня выкинуло на условиях i = 3, j = 0. Логично, потому что такой позиции в 3x3 матрице не существует
+								 * 2) Неправильно поставленны условия. Если в матрице на позиции (i;j) стоит 0, то заканчивай печатать.
+								 * Но это же неправильно. А если матрица имеет где-то 0, который нужно напечатать.
+								 */
+
+				printf("mass_sum[%d][%d]=%d ", i, j, mass_sum[i][j]); 
 			}
 			else{
-				break;
+				break; // * 3) (вытекает из 1) Это выход из for(j), а выхода из for(i) нету. Бесконечный цикл.
 			}
 		}
 		printf("\n");
@@ -70,12 +75,12 @@ void* threadFunc(void* thread_data){
 			}
 			data->mass_sum[i][n] = sum;
 			sum = 0;
-			printf("mass_sum[%d][%d]=%d ", i, n, data->mass_sum[i][n]);
+			printf("mass_sum[%d][%d]=%d ", i, n, data->mass_sum[i][n]); // Не убрал старый printf. Может все поломать.
 		}
 		printf("\n");
 	}
  	
-	print_matrix(data->mass_sum);
+	print_matrix(data->mass_sum); // Лучше вынести функцию в main, чтоб точно избавится от конфликта. Но так тоже должно работать.
 
 	return NULL;
 }
@@ -90,14 +95,14 @@ int main()
 	FILE *ptrfile1;
 	char ch;
 	int s;
-	ptrfile=fopen("mass.txt","r+"); 
+	ptrfile=fopen("./tests/1.txt","r+"); 
 	lines_1 = lines_of_matrix(ptrfile);
 	columns_1 = columns_of_matrix(ptrfile);
 	columns_1 = columns_1 / lines_1;
 	printf("lines_1 = %d \n", lines_1);
 	printf("columns_1 = %d \n", columns_1);
 
-	ptrfile1=fopen("mass1.txt","r+"); 
+	ptrfile1=fopen("./tests/2.txt","r+"); 
 	lines_2 = lines_of_matrix(ptrfile1);
 	columns_2 = columns_of_matrix(ptrfile1);
 	columns_2 = columns_2 / lines_2;
@@ -105,17 +110,17 @@ int main()
 	printf("columns_2 = %d \n", columns_2);
 
 	if (columns_1 == columns_1){
-		int **mass = (int **)malloc(sizeof(int *) * lines_1);
+		int **mass = (int **)malloc(sizeof(int *) * lines_1); // Вот тут ты создаешь массив указателей на int
 		for(int i = 0; i < columns_1; i++) {
-		    mass[i] = (int *)malloc(sizeof(int *) * columns_1);
+		    mass[i] = (int *)malloc(sizeof(int *) * columns_1); // А вот тут должен создавать массив int, на который будут указывать указатели, которые ты создаешь выше
 		}
-		int **mass1 = (int **)malloc(sizeof(int *) * lines_2);
+		int **mass1 = (int **)malloc(sizeof(int *) * lines_2); // Аналогично
 		for(int i = 0; i < columns_2; i++) {
-		    mass1[i] = (int *)malloc(sizeof(int *) * columns_2 );
+		    mass1[i] = (int *)malloc(sizeof(int *) * columns_2 ); // Аналогично
 		}
-		int **mass_sum = (int **)malloc(sizeof(int *) * lines_1);
+		int **mass_sum = (int **)malloc(sizeof(int *) * lines_1); // Аналогично
 		for(int i = 0; i < columns_2; i++) {
-		    mass_sum[i] = (int *)malloc(sizeof(int *) * columns_2);
+		    mass_sum[i] = (int *)malloc(sizeof(int *) * columns_2); // Аналогично
 		}
 
 		rewind(ptrfile);    
