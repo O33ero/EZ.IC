@@ -46,7 +46,7 @@ int columns_of_matrix(FILE* ptrfile1){
 void print_matrix(int** mass_sum, int lines, int columns){
 	for(int i = 0; i<=lines; i++){
 		for(int j = 0; j<columns; j++){
-			printf("mass_sum[%d][%d]=%d ", i, j, mass_sum[i][j]);
+			printf("mass_sum[%d][%d]=%d ", i, j, mass_sum[i][j]); // Ну вот с этим принтом, что то не так. Он не выводит самую последнию строку. Он её откровенно пиздит.
 			
 		}
 		printf("\n");
@@ -86,14 +86,14 @@ int main()
 	FILE *ptrfile1;
 	char ch;
 	int s;
-	ptrfile=fopen("mass.txt","r+"); 
+	ptrfile=fopen("./tests/1.txt","r+"); 
 	lines_1 = lines_of_matrix(ptrfile);
 	columns_1 = columns_of_matrix(ptrfile);
 	columns_1 = columns_1 / lines_1;
 	printf("lines_1 = %d \n", lines_1);
 	printf("columns_1 = %d \n", columns_1);
 
-	ptrfile1=fopen("mass1.txt","r+"); 
+	ptrfile1=fopen("./tests/1.txt","r+"); 
 	lines_2 = lines_of_matrix(ptrfile1);
 	columns_2 = columns_of_matrix(ptrfile1);
 	columns_2 = columns_2 / lines_2;
